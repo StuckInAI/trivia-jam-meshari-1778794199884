@@ -9,19 +9,6 @@ import Confetti from '@/components/Confetti';
 import { Lightbulb, RotateCcw, LogOut, Trophy } from 'lucide-react';
 import type { BoardCell } from '@/types';
 
-// For a mixed board: non-VC subs have 2 questions per level, VC subs have 1
-// Max points = subs × (200+400+600) × questionsPerLevel
-// We calculate dynamically from the board instead
-
-const VIBE_CODING_SUB_IDS = [
-  'vc-tech-skills',
-  'vc-ai-tech',
-  'vc-product',
-  'vc-team',
-  'vc-gov',
-  'vc-community',
-];
-
 export default function BoardPage() {
   const hydrated = useHydrated();
   const navigate = useNavigate();
@@ -38,14 +25,12 @@ export default function BoardPage() {
 
   const isAr = language === 'ar';
 
-  // Redirect to setup if no game in progress
   useEffect(() => {
     if (!hydrated) return;
     if (phase === 'setup' || board.length === 0) {
       navigate('/play', { replace: true });
       return;
     }
-    // If we're in question/steal phase, redirect to that question page
     if (phase === 'question' || phase === 'steal') {
       const activeCell = useGameStore.getState().activeCell;
       if (activeCell) {
@@ -56,7 +41,6 @@ export default function BoardPage() {
 
   if (!hydrated) return null;
   if (board.length === 0) return null;
-  // Don't render board UI while navigating away to question
   if (phase === 'question' || phase === 'steal') return null;
 
   const usedCount = board.filter((c) => c.used).length;
@@ -207,15 +191,9 @@ export default function BoardPage() {
     );
   }
 
-  // For each sub, determine how many rows (question slots) it has per point level
-  const getRowsForSub = (subId: string) =>
-    VIBE_CODING_SUB_IDS.includes(subId) ? 1 : 2;
-
-  // Maximum rows across all selected subs
-  const maxRows = subs.reduce((max, s) => Math.max(max, getRowsForSub(s.id)), 0);
-
-  // Build point-level rows: for each point value, for each row index up to maxRows
+  // All subs have 2 questions per level — flat rows: 200×2, 400×2, 600×2
   const pointLevels = [200, 400, 600] as Array<200 | 400 | 600>;
+  const rowsPerLevel = 2;
 
   // BOARD SCREEN
   return (
@@ -324,7 +302,7 @@ export default function BoardPage() {
               ))}
             </div>
 
-            {/* Rows: for each point level, for each row index */}
+            {/* Rows: for each point level × 2 rows */}
             <div
               style={{
                 display: 'flex',
@@ -335,7 +313,7 @@ export default function BoardPage() {
               }}
             >
               {pointLevels.map((points) =>
-                Array.from({ length: maxRows }).map((_, rowIdx) => {
+                Array.from({ length: rowsPerLevel }).map((_, rowIdx) => {
                   const rowNum = rowIdx + 1;
                   return (
                     <div
@@ -367,21 +345,6 @@ export default function BoardPage() {
 
                       {/* One cell per subcategory */}
                       {subs.map((s) => {
-                        const subRows = getRowsForSub(s.id);
-                        // If this sub doesn't have a question at this row index, render empty
-                        if (rowNum > subRows) {
-                          return (
-                            <div
-                              key={`${s.id}-empty-${rowNum}`}
-                              style={{
-                                background: 'var(--card-bg)',
-                                border: '1px solid var(--card-border)',
-                                borderRadius: 12,
-                                opacity: 0.2,
-                              }}
-                            />
-                          );
-                        }
                         const cell = board.find(
                           (c) =>
                             c.subcategoryId === s.id &&

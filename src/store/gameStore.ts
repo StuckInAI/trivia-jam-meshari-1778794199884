@@ -38,28 +38,15 @@ const initialTeamA: Team = { id: 'a', name: 'الفريق الأول', score: 0 
 const initialTeamB: Team = { id: 'b', name: 'الفريق الثاني', score: 0 };
 
 /**
- * Build board with 2 questions per point level per subcategory.
+ * Build board with 2 questions per point level per subcategory for ALL categories.
  * Each cell's questionId follows the pattern: q-{subId}-{points}-{row}
  * Total cells = 6 subs × 3 point levels × 2 rows = 36 cells.
- *
- * Special case: Vibe Coding subcategories only have 1 question per level.
  */
-const VIBE_CODING_SUB_IDS = [
-  'vc-tech-skills',
-  'vc-ai-tech',
-  'vc-product',
-  'vc-team',
-  'vc-gov',
-  'vc-community',
-];
-
 function buildBoard(subs: SubCategory[]): BoardCell[] {
   const cells: BoardCell[] = [];
   for (const s of subs) {
-    const isVibeCoding = VIBE_CODING_SUB_IDS.includes(s.id);
-    const rowCount = isVibeCoding ? 1 : 2;
     for (const p of [200, 400, 600] as Array<200 | 400 | 600>) {
-      for (let row = 1; row <= rowCount; row++) {
+      for (let row = 1; row <= 2; row++) {
         cells.push({
           subcategoryId: s.id,
           subcategoryName: s.name,
