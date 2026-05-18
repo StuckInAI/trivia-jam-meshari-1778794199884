@@ -135,7 +135,8 @@ export const useGameStore = create<GameState>()(
       },
 
       closeQuestion: () => {
-        // Reset ALL question-related state and return phase to 'board'
+        // Fully reset all question-related state and return phase to 'board'
+        // This ensures the board is completely interactive again
         set({
           activeCell: null,
           activeQuestion: null,

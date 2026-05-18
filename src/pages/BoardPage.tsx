@@ -38,6 +38,10 @@ export default function BoardPage() {
   if (!hydrated) return null;
   if (board.length === 0) return null;
 
+  // Only render the board UI when phase is 'board' or 'results'
+  // If phase is 'question' or 'steal', we should be on the question page
+  // (this handles back-navigation from question page)
+
   const usedCount = board.filter((c) => c.used).length;
   const wonPoints = board
     .filter((c) => c.used && c.wonBy)

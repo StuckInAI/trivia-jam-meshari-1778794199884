@@ -59,6 +59,7 @@ export default function QuestionPage() {
     } else if (phase === 'setup') {
       navigate('/play', { replace: true });
     }
+    // phase === 'question' or 'steal' → stay on this page
   }, [hydrated, phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sub = useMemo(
@@ -88,6 +89,8 @@ export default function QuestionPage() {
   // Close = call store action; phase-watch effect handles navigation
   const handleClose = () => {
     closeQuestion();
+    // Navigate immediately — don't rely only on effect for back button UX
+    navigate('/play/board', { replace: true });
   };
 
   // Labels
