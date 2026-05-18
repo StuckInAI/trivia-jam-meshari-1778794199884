@@ -5,9 +5,11 @@ import SetupPage from '@/pages/SetupPage';
 import BoardPage from '@/pages/BoardPage';
 import QuestionPage from '@/pages/QuestionPage';
 import { useThemeStore } from '@/store/themeStore';
+import { useGameStore } from '@/store/gameStore';
 
 export default function App() {
   const theme = useThemeStore((s) => s.theme);
+  const language = useGameStore((s) => s.language);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -19,6 +21,12 @@ export default function App() {
       root.classList.remove('dark');
     }
   }, [theme]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('dir', language === 'ar' ? 'rtl' : 'ltr');
+    root.setAttribute('lang', language);
+  }, [language]);
 
   return (
     <Routes>

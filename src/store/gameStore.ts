@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Team, SubCategory, BoardCell, Question, GamePhase, TeamId } from '@/types';
+import type { Team, SubCategory, BoardCell, Question, GamePhase, TeamId, Language } from '@/types';
 import { findQuestion } from '@/lib/data';
 
 export const MAX_HINTS_PER_TEAM = 2;
 
 interface GameState {
+  language: Language;
   teamA: Team;
   teamB: Team;
   selectedSubcategories: SubCategory[];
@@ -18,6 +19,7 @@ interface GameState {
   hintRevealed: boolean;
   hintsUsed: { a: number; b: number };
 
+  setLanguage: (lang: Language) => void;
   setTeamName: (id: TeamId, name: string) => void;
   toggleSubcategory: (sub: SubCategory) => void;
   startGame: () => void;
@@ -60,6 +62,7 @@ function other(t: TeamId): TeamId {
 export const useGameStore = create<GameState>()(
   persist(
     (set, get) => ({
+      language: 'ar',
       teamA: { ...initialTeamA },
       teamB: { ...initialTeamB },
       selectedSubcategories: [],
@@ -71,6 +74,12 @@ export const useGameStore = create<GameState>()(
       showAnswer: false,
       hintRevealed: false,
       hintsUsed: { a: 0, b: 0 },
+
+      setLanguage: (lang) => {
+        // Only allow language change outside of an active game
+        if (get().phase !== 'setup') return;
+        set({ language: lang, selectedSubcategories: [] });
+      },
 
       setTeamName: (id, name) => {
         if (id === 'a') set({ teamA: { ...get().teamA, name } });
@@ -165,11 +174,9 @@ export const useGameStore = create<GameState>()(
         const { phase, activeCell, currentTurn, board } = get();
         if (!activeCell) return;
         if (phase === 'question') {
-          // Move to steal phase
           set({ phase: 'steal', showAnswer: false, hintRevealed: false });
           return;
         }
-        // Already in steal? Treat as steal wrong (fallback)
         const newBoard = board.map((c) =>
           c.questionId === activeCell.questionId ? { ...c, used: true } : c
         );
@@ -241,6 +248,7 @@ export const useGameStore = create<GameState>()(
           showAnswer: false,
           hintRevealed: false,
           hintsUsed: { a: 0, b: 0 },
+          // language is preserved across reset
         });
       },
     }),

@@ -1,4 +1,5 @@
 export type TeamId = 'a' | 'b';
+export type Language = 'ar' | 'en';
 
 export interface Team {
   id: TeamId;

@@ -1,6 +1,6 @@
 import type { MainCategory } from '@/types';
 
-export const MAIN_CATEGORIES: MainCategory[] = [
+export const ARABIC_MAIN_CATEGORIES: MainCategory[] = [
   {
     id: 'unstuck-labs', name: 'Unstuck Labs', emoji: '🚀', color: '#E85D04',
     subcategories: [
@@ -173,7 +173,7 @@ export const MAIN_CATEGORIES: MainCategory[] = [
     ],
   },
   {
-    id: 'science-space', name: 'علوم وفضاء', emoji: '🚀', color: '#6366F1',
+    id: 'science-space', name: 'علوم وفضاء', emoji: '🔭', color: '#6366F1',
     subcategories: [
       { id: 'ss-planets', mainCategoryId: 'science-space', name: 'الكواكب', icon: '🪐' },
       { id: 'ss-physics', mainCategoryId: 'science-space', name: 'فيزياء', icon: '⚛️' },
@@ -184,12 +184,93 @@ export const MAIN_CATEGORIES: MainCategory[] = [
   },
 ];
 
-export const ALL_SUBCATEGORIES = MAIN_CATEGORIES.flatMap((c) => c.subcategories);
+export const ENGLISH_MAIN_CATEGORIES: MainCategory[] = [
+  {
+    id: 'en-world-geo', name: 'World Geography', emoji: '🌍', color: '#10B981',
+    subcategories: [
+      { id: 'en-geo-capitals', mainCategoryId: 'en-world-geo', name: 'Capitals', icon: '🏛️' },
+      { id: 'en-geo-landmarks', mainCategoryId: 'en-world-geo', name: 'Landmarks', icon: '🗿' },
+      { id: 'en-geo-countries', mainCategoryId: 'en-world-geo', name: 'Countries', icon: '🌐' },
+      { id: 'en-geo-flags', mainCategoryId: 'en-world-geo', name: 'Flags', icon: '🚩' },
+    ],
+  },
+  {
+    id: 'en-hollywood', name: 'Hollywood', emoji: '🎬', color: '#8B5CF6',
+    subcategories: [
+      { id: 'en-hw-movies', mainCategoryId: 'en-hollywood', name: 'Movies', icon: '🎞️' },
+      { id: 'en-hw-actors', mainCategoryId: 'en-hollywood', name: 'Actors', icon: '🎭' },
+      { id: 'en-hw-oscars', mainCategoryId: 'en-hollywood', name: 'Oscars', icon: '🏆' },
+      { id: 'en-hw-blockbusters', mainCategoryId: 'en-hollywood', name: 'Blockbusters', icon: '💥' },
+    ],
+  },
+  {
+    id: 'en-global-sports', name: 'Global Sports', emoji: '⚽', color: '#3B82F6',
+    subcategories: [
+      { id: 'en-sp-football', mainCategoryId: 'en-global-sports', name: 'Football', icon: '⚽' },
+      { id: 'en-sp-nba', mainCategoryId: 'en-global-sports', name: 'NBA', icon: '🏀' },
+      { id: 'en-sp-olympics', mainCategoryId: 'en-global-sports', name: 'Olympics', icon: '🥇' },
+      { id: 'en-sp-tennis', mainCategoryId: 'en-global-sports', name: 'Tennis', icon: '🎾' },
+    ],
+  },
+  {
+    id: 'en-science-tech', name: 'Science & Tech', emoji: '🧠', color: '#6366F1',
+    subcategories: [
+      { id: 'en-st-space', mainCategoryId: 'en-science-tech', name: 'Space', icon: '🚀' },
+      { id: 'en-st-inventions', mainCategoryId: 'en-science-tech', name: 'Inventions', icon: '💡' },
+      { id: 'en-st-biology', mainCategoryId: 'en-science-tech', name: 'Biology', icon: '🧬' },
+      { id: 'en-st-ai', mainCategoryId: 'en-science-tech', name: 'AI', icon: '🤖' },
+    ],
+  },
+  {
+    id: 'en-pop-music', name: 'Pop Music', emoji: '🎵', color: '#EC4899',
+    subcategories: [
+      { id: 'en-pm-artists', mainCategoryId: 'en-pop-music', name: 'Artists', icon: '🎤' },
+      { id: 'en-pm-albums', mainCategoryId: 'en-pop-music', name: 'Albums', icon: '💿' },
+      { id: 'en-pm-lyrics', mainCategoryId: 'en-pop-music', name: 'Lyrics', icon: '🎼' },
+      { id: 'en-pm-concerts', mainCategoryId: 'en-pop-music', name: 'Concerts', icon: '🎪' },
+    ],
+  },
+  {
+    id: 'en-world-history', name: 'World History', emoji: '🏛️', color: '#F97316',
+    subcategories: [
+      { id: 'en-wh-empires', mainCategoryId: 'en-world-history', name: 'Empires', icon: '🏰' },
+      { id: 'en-wh-wars', mainCategoryId: 'en-world-history', name: 'Wars', icon: '⚔️' },
+      { id: 'en-wh-revolutions', mainCategoryId: 'en-world-history', name: 'Revolutions', icon: '🔥' },
+      { id: 'en-wh-leaders', mainCategoryId: 'en-world-history', name: 'Leaders', icon: '👑' },
+    ],
+  },
+  {
+    id: 'en-food-culture', name: 'Food & Culture', emoji: '🍔', color: '#EF4444',
+    subcategories: [
+      { id: 'en-fc-cuisines', mainCategoryId: 'en-food-culture', name: 'Cuisines', icon: '🍜' },
+      { id: 'en-fc-dishes', mainCategoryId: 'en-food-culture', name: 'Dishes', icon: '🍽️' },
+      { id: 'en-fc-drinks', mainCategoryId: 'en-food-culture', name: 'Drinks', icon: '🥤' },
+      { id: 'en-fc-restaurants', mainCategoryId: 'en-food-culture', name: 'Restaurants', icon: '🍴' },
+    ],
+  },
+  {
+    id: 'en-tech-internet', name: 'Tech & Internet', emoji: '💻', color: '#14B8A6',
+    subcategories: [
+      { id: 'en-ti-social', mainCategoryId: 'en-tech-internet', name: 'Social Media', icon: '📱' },
+      { id: 'en-ti-apps', mainCategoryId: 'en-tech-internet', name: 'Apps', icon: '📲' },
+      { id: 'en-ti-companies', mainCategoryId: 'en-tech-internet', name: 'Companies', icon: '🏢' },
+      { id: 'en-ti-gaming', mainCategoryId: 'en-tech-internet', name: 'Gaming', icon: '🎮' },
+    ],
+  },
+];
+
+// Backwards compatibility
+export const MAIN_CATEGORIES = ARABIC_MAIN_CATEGORIES;
+
+export const ALL_ARABIC_SUBCATEGORIES = ARABIC_MAIN_CATEGORIES.flatMap((c) => c.subcategories);
+export const ALL_ENGLISH_SUBCATEGORIES = ENGLISH_MAIN_CATEGORIES.flatMap((c) => c.subcategories);
+export const ALL_SUBCATEGORIES = [...ALL_ARABIC_SUBCATEGORIES, ...ALL_ENGLISH_SUBCATEGORIES];
 
 export function findSubcategory(id: string) {
   return ALL_SUBCATEGORIES.find((s) => s.id === id);
 }
 
 export function findMainCategoryForSub(subId: string) {
-  return MAIN_CATEGORIES.find((c) => c.subcategories.some((s) => s.id === subId));
+  const allCats = [...ARABIC_MAIN_CATEGORIES, ...ENGLISH_MAIN_CATEGORIES];
+  return allCats.find((c) => c.subcategories.some((s) => s.id === subId));
 }
