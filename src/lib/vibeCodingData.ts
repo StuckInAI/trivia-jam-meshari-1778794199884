@@ -81,7 +81,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-ai-tech',
     points: 200,
     text: 'What is the difference between AI and a regular computer program?',
-    answer: 'A regular computer program follows explicit instructions written by a programmer — it does exactly what it's told. AI learns from data and can make decisions or predictions without being explicitly programmed for every scenario.',
+    answer: 'A regular computer program follows explicit instructions written by a programmer — it does exactly what it\'s told. AI learns from data and can make decisions or predictions without being explicitly programmed for every scenario.',
     hint: 'One follows rules, the other learns them.',
   },
   {
@@ -139,7 +139,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-product',
     points: 400,
     text: 'Walk us through the difference between a product roadmap and a backlog. How should a PM prioritize features?',
-    answer: 'A roadmap is a high-level strategic plan showing what will be built and when — it is for stakeholders. A backlog is a detailed list of all tasks, bugs, and features waiting to be worked on. PMs prioritize using frameworks like RICE (Reach, Impact, Confidence, Effort), MoSCoW (Must/Should/Could/Won't), or user impact vs effort grids.',
+    answer: 'A roadmap is a high-level strategic plan showing what will be built and when — it is for stakeholders. A backlog is a detailed list of all tasks, bugs, and features waiting to be worked on. PMs prioritize using frameworks like RICE (Reach, Impact, Confidence, Effort), MoSCoW (Must/Should/Could/Won\'t), or user impact vs effort grids.',
     hint: 'One is the big picture plan, the other is the to-do list.',
   },
   {
@@ -246,7 +246,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     id: 'q-vc-gov-400-2',
     subcategoryId: 'vc-gov',
     points: 400,
-    text: 'What does "scalability" mean and what is one architectural decision that affects it early in a product\'s life?',
+    text: "What does \"scalability\" mean and what is one architectural decision that affects it early in a product's life?",
     answer: 'Scalability means the system can handle growing amounts of work or users without degrading performance. A critical early decision is choosing between a monolithic architecture (all code in one deployable unit — simple but hard to scale individual components) vs a microservices architecture (independent services — harder to set up but scales components separately). Database choice (SQL vs NoSQL, vertical vs horizontal scaling) is another key early decision.',
     hint: 'Can your system grow without breaking? Monolith vs microservices is one early fork.',
   },
@@ -305,7 +305,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-community',
     points: 600,
     text: 'A city government wants to use an AI system to allocate social services. What ethical risks exist and how would you design a system that is fair and auditable?',
-    answer: 'Risks include: algorithmic bias (the model may reflect historical discrimination), lack of transparency (recipients don't know why they were denied), no human appeal process, data privacy violations, and feedback loops that entrench inequality. Design safeguards: use diverse and representative training data, build explainability into the model (not black-box), require human review for all denial decisions, create a public appeals process, publish audit reports regularly, and involve community stakeholders in the design process.',
+    answer: 'Risks include: algorithmic bias (the model may reflect historical discrimination), lack of transparency (recipients don\'t know why they were denied), no human appeal process, data privacy violations, and feedback loops that entrench inequality. Design safeguards: use diverse and representative training data, build explainability into the model (not black-box), require human review for all denial decisions, create a public appeals process, publish audit reports regularly, and involve community stakeholders in the design process.',
     hint: 'Who does the AI hurt if it gets it wrong? How do you explain and challenge its decisions?',
   },
   {

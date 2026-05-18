@@ -38,10 +38,6 @@ export default function BoardPage() {
   if (!hydrated) return null;
   if (board.length === 0) return null;
 
-  // If we somehow land on board while a question is active (e.g. hard back),
-  // just show the board normally — the phase-watch on QuestionPage handles forward nav.
-  // The board should NEVER be dimmed when rendering this page directly.
-
   const usedCount = board.filter((c) => c.used).length;
   const wonPoints = board
     .filter((c) => c.used && c.wonBy)
@@ -188,8 +184,7 @@ export default function BoardPage() {
     );
   }
 
-  // BOARD SCREEN — never dim, never block pointer events here.
-  // The question is shown on its own route /play/board/question/:id
+  // BOARD SCREEN
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}

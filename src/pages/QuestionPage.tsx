@@ -149,7 +149,7 @@ export default function QuestionPage() {
           borderTop: `4px solid ${activeColor}`,
         }}
       >
-        {/* Back button — position respects RTL/LTR */}
+        {/* Back button */}
         <button
           onClick={handleClose}
           aria-label={isAr ? 'رجوع' : 'Back'}
@@ -190,7 +190,7 @@ export default function QuestionPage() {
             marginBottom: 20,
             flexWrap: 'wrap',
             gap: 12,
-            paddingInlineStart: 52, // leave room for the back button
+            paddingInlineStart: 52,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
