@@ -49,9 +49,10 @@ export default function QuestionPage() {
       return;
     }
     selectCell(cell);
-  }, [hydrated, questionId]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, questionId]);
 
-  // Phase-watch: when phase goes back to board/results/setup → navigate away
+  // Phase-watch: navigate based on phase changes
   useEffect(() => {
     if (!hydrated) return;
     if (phase === 'board' || phase === 'results') {
@@ -60,7 +61,8 @@ export default function QuestionPage() {
       navigate('/play', { replace: true });
     }
     // phase === 'question' or 'steal' → stay on this page
-  }, [hydrated, phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated, phase]);
 
   const sub = useMemo(
     () => (activeCell ? findSubcategory(activeCell.subcategoryId) : undefined),
@@ -89,7 +91,7 @@ export default function QuestionPage() {
   // Close = call store action; phase-watch effect handles navigation
   const handleClose = () => {
     closeQuestion();
-    // Navigate immediately — don't rely only on effect for back button UX
+    // Navigate immediately so back button feels instant
     navigate('/play/board', { replace: true });
   };
 

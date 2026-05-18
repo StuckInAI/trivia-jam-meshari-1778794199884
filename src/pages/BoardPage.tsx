@@ -35,12 +35,20 @@ export default function BoardPage() {
     }
   }, [hydrated, phase, board.length, navigate]);
 
+  // If phase is question/steal, redirect to the question page
+  useEffect(() => {
+    if (!hydrated) return;
+    if ((phase === 'question' || phase === 'steal')) {
+      // find the active cell from the store
+      const activeCell = useGameStore.getState().activeCell;
+      if (activeCell) {
+        navigate(`/play/board/question/${activeCell.questionId}`, { replace: true });
+      }
+    }
+  }, [hydrated, phase, navigate]);
+
   if (!hydrated) return null;
   if (board.length === 0) return null;
-
-  // Only render the board UI when phase is 'board' or 'results'
-  // If phase is 'question' or 'steal', we should be on the question page
-  // (this handles back-navigation from question page)
 
   const usedCount = board.filter((c) => c.used).length;
   const wonPoints = board
@@ -188,7 +196,7 @@ export default function BoardPage() {
     );
   }
 
-  // BOARD SCREEN
+  // BOARD SCREEN — only render when phase is 'board'
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
