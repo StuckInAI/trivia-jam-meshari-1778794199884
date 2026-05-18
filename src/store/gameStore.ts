@@ -76,7 +76,6 @@ export const useGameStore = create<GameState>()(
       hintsUsed: { a: 0, b: 0 },
 
       setLanguage: (lang) => {
-        // Only allow language change outside of an active game
         if (get().phase !== 'setup') return;
         set({ language: lang, selectedSubcategories: [] });
       },
@@ -136,6 +135,7 @@ export const useGameStore = create<GameState>()(
       },
 
       closeQuestion: () => {
+        // Reset ALL question-related state and return phase to 'board'
         set({
           activeCell: null,
           activeQuestion: null,
@@ -154,8 +154,14 @@ export const useGameStore = create<GameState>()(
             ? { ...c, used: true, wonBy: currentTurn }
             : c
         );
-        const newA = currentTurn === 'a' ? { ...teamA, score: teamA.score + points } : teamA;
-        const newB = currentTurn === 'b' ? { ...teamB, score: teamB.score + points } : teamB;
+        const newA =
+          currentTurn === 'a'
+            ? { ...teamA, score: teamA.score + points }
+            : teamA;
+        const newB =
+          currentTurn === 'b'
+            ? { ...teamB, score: teamB.score + points }
+            : teamB;
         const allDone = newBoard.every((c) => c.used);
         set({
           board: newBoard,
@@ -174,9 +180,11 @@ export const useGameStore = create<GameState>()(
         const { phase, activeCell, currentTurn, board } = get();
         if (!activeCell) return;
         if (phase === 'question') {
+          // Transition to steal — stay on question page
           set({ phase: 'steal', showAnswer: false, hintRevealed: false });
           return;
         }
+        // phase === 'steal': mark cell as used without a winner
         const newBoard = board.map((c) =>
           c.questionId === activeCell.questionId ? { ...c, used: true } : c
         );
@@ -198,10 +206,18 @@ export const useGameStore = create<GameState>()(
         const stealer = other(currentTurn);
         const points = activeCell.points;
         const newBoard = board.map((c) =>
-          c.questionId === activeCell.questionId ? { ...c, used: true, wonBy: stealer } : c
+          c.questionId === activeCell.questionId
+            ? { ...c, used: true, wonBy: stealer }
+            : c
         );
-        const newA = stealer === 'a' ? { ...teamA, score: teamA.score + points } : teamA;
-        const newB = stealer === 'b' ? { ...teamB, score: teamB.score + points } : teamB;
+        const newA =
+          stealer === 'a'
+            ? { ...teamA, score: teamA.score + points }
+            : teamA;
+        const newB =
+          stealer === 'b'
+            ? { ...teamB, score: teamB.score + points }
+            : teamB;
         const allDone = newBoard.every((c) => c.used);
         set({
           board: newBoard,
@@ -248,7 +264,7 @@ export const useGameStore = create<GameState>()(
           showAnswer: false,
           hintRevealed: false,
           hintsUsed: { a: 0, b: 0 },
-          // language is preserved across reset
+          // language is intentionally preserved
         });
       },
     }),
