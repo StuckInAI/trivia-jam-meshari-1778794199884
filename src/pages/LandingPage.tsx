@@ -170,7 +170,7 @@ export default function LandingPage() {
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 40, fontSize: 17 }}>
           {isAr
             ? `١٨ مجموعة رئيسية، ١٠١ فئة فرعية`
-            : `8 main categories, 32 subcategories`
+            : `9 main categories, 38 subcategories`
           }
         </p>
         <div className="hide-scrollbar" style={{ overflowX: 'auto', padding: '4px 28px' }}>

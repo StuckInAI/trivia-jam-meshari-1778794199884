@@ -28,6 +28,7 @@ export default function BoardPage() {
 
   const isAr = language === 'ar';
 
+  // Redirect to setup if no game in progress
   useEffect(() => {
     if (!hydrated) return;
     if (phase === 'setup' || board.length === 0) {
@@ -35,11 +36,10 @@ export default function BoardPage() {
     }
   }, [hydrated, phase, board.length, navigate]);
 
-  // If phase is question/steal, redirect to the question page
+  // If phase is question/steal, redirect to the active question page
   useEffect(() => {
     if (!hydrated) return;
-    if ((phase === 'question' || phase === 'steal')) {
-      // find the active cell from the store
+    if (phase === 'question' || phase === 'steal') {
       const activeCell = useGameStore.getState().activeCell;
       if (activeCell) {
         navigate(`/play/board/question/${activeCell.questionId}`, { replace: true });
@@ -49,6 +49,9 @@ export default function BoardPage() {
 
   if (!hydrated) return null;
   if (board.length === 0) return null;
+
+  // Don't render board UI while navigating away to question
+  if (phase === 'question' || phase === 'steal') return null;
 
   const usedCount = board.filter((c) => c.used).length;
   const wonPoints = board
@@ -196,7 +199,7 @@ export default function BoardPage() {
     );
   }
 
-  // BOARD SCREEN — only render when phase is 'board'
+  // BOARD SCREEN
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}

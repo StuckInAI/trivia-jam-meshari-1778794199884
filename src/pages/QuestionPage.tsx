@@ -91,7 +91,7 @@ export default function QuestionPage() {
   // Close = call store action; phase-watch effect handles navigation
   const handleClose = () => {
     closeQuestion();
-    // Navigate immediately so back button feels instant
+    // Navigate immediately so the back button feels instant
     navigate('/play/board', { replace: true });
   };
 
@@ -127,7 +127,7 @@ export default function QuestionPage() {
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
-        background: 'var(--bg)',
+        background: 'var(--bg-gradient)',
         position: 'relative',
       }}
     >
