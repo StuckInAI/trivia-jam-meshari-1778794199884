@@ -9,7 +9,8 @@ import Confetti from '@/components/Confetti';
 import { Lightbulb, RotateCcw, LogOut, Trophy } from 'lucide-react';
 import type { BoardCell } from '@/types';
 
-const TOTAL_POINTS_PER_SUB = 200 + 200 + 400 + 400 + 600 + 600;
+// 1 question per level × 3 levels × 6 subs = 18 total
+const TOTAL_POINTS_PER_SUB = 200 + 400 + 600;
 const MAX_POINTS = TOTAL_POINTS_PER_SUB * 6;
 
 export default function BoardPage() {
@@ -62,7 +63,6 @@ export default function BoardPage() {
 
   const handleCellClick = (cell: BoardCell) => {
     if (cell.used) return;
-    // Save question state first, then navigate
     selectCell(cell);
     navigate(`/play/board/question/${cell.questionId}`);
   };
@@ -196,7 +196,7 @@ export default function BoardPage() {
     );
   }
 
-  // BOARD SCREEN
+  // BOARD SCREEN — 3 rows (200, 400, 600), 1 cell per sub per row
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
@@ -269,13 +269,13 @@ export default function BoardPage() {
         >
           <div
             style={{
-              minWidth: 700,
+              minWidth: 500,
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            {/* Header row */}
+            {/* Header row — subcategory names */}
             <div
               style={{
                 display: 'grid',
@@ -284,7 +284,7 @@ export default function BoardPage() {
                 marginBottom: 8,
               }}
             >
-              <div></div>
+              <div />
               {subs.map((s) => (
                 <div
                   key={s.id}
@@ -294,38 +294,71 @@ export default function BoardPage() {
                     borderRadius: 12,
                     textAlign: 'center',
                     fontWeight: 900,
-                    fontSize: 13,
+                    fontSize: 12,
                   }}
                 >
                   <div style={{ fontSize: 22 }}>{s.icon}</div>
-                  <div style={{ marginTop: 4 }}>{s.name}</div>
+                  <div style={{ marginTop: 4, lineHeight: 1.2 }}>{s.name}</div>
                 </div>
               ))}
             </div>
 
-            {/* Cells grid */}
+            {/* 3 rows — one per point level */}
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: `40px repeat(${subs.length}, 1fr)`,
-                gridAutoRows: '1fr',
+                display: 'flex',
+                flexDirection: 'column',
                 gap: 8,
                 flex: 1,
                 minHeight: 0,
               }}
             >
-              {([200, 200, 400, 400, 600, 600] as Array<200 | 400 | 600>).map(
-                (points, rowIdx) => (
-                  <RowFragment
-                    key={rowIdx}
-                    rowIdx={rowIdx}
-                    points={points}
-                    subs={subs.map((s) => s.id)}
-                    board={board}
-                    onCellClick={handleCellClick}
-                  />
-                )
-              )}
+              {([200, 400, 600] as Array<200 | 400 | 600>).map((points) => (
+                <div
+                  key={points}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: `40px repeat(${subs.length}, 1fr)`,
+                    gap: 8,
+                    flex: 1,
+                    minHeight: 0,
+                  }}
+                >
+                  {/* Point label */}
+                  <div
+                    style={{
+                      background: `${pointColor(points)}33`,
+                      border: `1px solid ${pointColor(points)}55`,
+                      borderRadius: 10,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: pointColor(points),
+                      fontWeight: 900,
+                      fontSize: 13,
+                    }}
+                  >
+                    {points}
+                  </div>
+
+                  {/* One cell per subcategory */}
+                  {subs.map((s) => {
+                    const cell = board.find(
+                      (c) =>
+                        c.subcategoryId === s.id &&
+                        c.points === points
+                    );
+                    if (!cell) return <div key={s.id} />;
+                    return (
+                      <Cell
+                        key={cell.questionId}
+                        cell={cell}
+                        onClick={() => handleCellClick(cell)}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -383,7 +416,7 @@ export default function BoardPage() {
           }}
         >
           <span dir="ltr">
-            {usedCount}/36 {isAr ? 'سؤال' : 'questions'}
+            {usedCount}/18 {isAr ? 'سؤال' : 'questions'}
           </span>
           <span>·</span>
           <span dir="ltr">
@@ -392,60 +425,6 @@ export default function BoardPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-type RowFragmentProps = {
-  rowIdx: number;
-  points: 200 | 400 | 600;
-  subs: string[];
-  board: BoardCell[];
-  onCellClick: (cell: BoardCell) => void;
-};
-
-function RowFragment({
-  rowIdx,
-  points,
-  subs,
-  board,
-  onCellClick,
-}: RowFragmentProps) {
-  const rowNumber = (rowIdx % 2) + 1;
-  const pc = pointColor(points);
-  return (
-    <>
-      <div
-        style={{
-          background: `${pc}33`,
-          border: `1px solid ${pc}55`,
-          borderRadius: 10,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: pc,
-          fontWeight: 900,
-          fontSize: 13,
-        }}
-      >
-        {points}
-      </div>
-      {subs.map((subId) => {
-        const cell = board.find(
-          (c) =>
-            c.subcategoryId === subId &&
-            c.points === points &&
-            c.questionId.endsWith(`-${rowNumber}`)
-        );
-        if (!cell) return <div key={subId} />;
-        return (
-          <Cell
-            key={cell.questionId}
-            cell={cell}
-            onClick={() => onCellClick(cell)}
-          />
-        );
-      })}
-    </>
   );
 }
 
@@ -497,6 +476,8 @@ function Cell({
         fontSize: 22,
         transition: 'all 0.15s ease',
         cursor: 'pointer',
+        width: '100%',
+        height: '100%',
       }}
       onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
         e.currentTarget.style.transform = 'translateY(-2px)';

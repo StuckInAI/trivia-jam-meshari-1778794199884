@@ -33,13 +33,9 @@ export default function SetupPage() {
 
   // Quick-select all 6 Vibe Coding subcategories at once
   const handleVibeCodeQuickStart = () => {
-    // Clear current selection first, then add all vc subs
     const vcSubs = VIBE_CODING_CATEGORY.subcategories;
-    // Use toggleSubcategory logic — easier to call startGame store reset path
-    // We'll directly call store's selectSubcategories via toggleSub
-    // First deselect anything selected that isn't vc, then select all vc subs
-    const currentSelected = selected;
-    // Deselect non-vc
+    const currentSelected = useGameStore.getState().selectedSubcategories;
+    // Deselect non-vc subs
     currentSelected.forEach((s) => {
       if (!vcSubs.find((v) => v.id === s.id)) {
         toggleSub(s);
@@ -47,7 +43,8 @@ export default function SetupPage() {
     });
     // Select missing vc subs
     vcSubs.forEach((v) => {
-      if (!currentSelected.find((s) => s.id === v.id)) {
+      const fresh = useGameStore.getState().selectedSubcategories;
+      if (!fresh.find((s) => s.id === v.id)) {
         toggleSub(v);
       }
     });
@@ -153,7 +150,7 @@ export default function SetupPage() {
                   }}>FEATURED</span>
                 </div>
                 <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600 }}>
-                  6 subcategories · 36 real questions · 200 / 400 / 600 pts
+                  6 subcategories · 18 questions · 200 / 400 / 600 pts · max 2 words per answer
                 </div>
               </div>
             </div>

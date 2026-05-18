@@ -37,19 +37,22 @@ interface GameState {
 const initialTeamA: Team = { id: 'a', name: 'الفريق الأول', score: 0 };
 const initialTeamB: Team = { id: 'b', name: 'الفريق الثاني', score: 0 };
 
+/**
+ * Build board with 1 question per point level per subcategory.
+ * Each cell's questionId follows the pattern: q-{subId}-{points}-1
+ * Total cells = 6 subs × 3 point levels = 18 cells.
+ */
 function buildBoard(subs: SubCategory[]): BoardCell[] {
   const cells: BoardCell[] = [];
   for (const s of subs) {
     for (const p of [200, 400, 600] as Array<200 | 400 | 600>) {
-      for (let row = 1; row <= 2; row++) {
-        cells.push({
-          subcategoryId: s.id,
-          subcategoryName: s.name,
-          questionId: `q-${s.id}-${p}-${row}`,
-          points: p,
-          used: false,
-        });
-      }
+      cells.push({
+        subcategoryId: s.id,
+        subcategoryName: s.name,
+        questionId: `q-${s.id}-${p}-1`,
+        points: p,
+        used: false,
+      });
     }
   }
   return cells;
