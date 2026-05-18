@@ -1,20 +1,25 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { useHydrated } from '@/hooks/useHydrated';
-import { MAIN_CATEGORIES } from '@/lib/categories';
+import { ARABIC_MAIN_CATEGORIES, ENGLISH_MAIN_CATEGORIES } from '@/lib/categories';
 import Logo from '@/components/Logo';
 import ThemeToggle from '@/components/ThemeToggle';
+import LanguageToggle from '@/components/LanguageToggle';
 import { Check, ArrowLeft, Play } from 'lucide-react';
 
 export default function SetupPage() {
   const hydrated = useHydrated();
   const navigate = useNavigate();
+  const language = useGameStore((s) => s.language);
   const teamA = useGameStore((s) => s.teamA);
   const teamB = useGameStore((s) => s.teamB);
   const selected = useGameStore((s) => s.selectedSubcategories);
   const setTeamName = useGameStore((s) => s.setTeamName);
   const toggleSub = useGameStore((s) => s.toggleSubcategory);
   const startGame = useGameStore((s) => s.startGame);
+
+  const isAr = language === 'ar';
+  const displayCategories = isAr ? ARABIC_MAIN_CATEGORIES : ENGLISH_MAIN_CATEGORIES;
 
   const isSelected = (id: string) => selected.some((s) => s.id === id);
   const canStart = hydrated && selected.length === 6 && teamA.name.trim().length > 0 && teamB.name.trim().length > 0;
@@ -32,38 +37,58 @@ export default function SetupPage() {
         padding: '14px 24px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <Link to="/" className="btn-ghost"><ArrowLeft size={16} /> العودة</Link>
+        <Link to="/" className="btn-ghost">
+          <ArrowLeft size={16} />
+          {isAr ? 'العودة' : 'Back'}
+        </Link>
         <Logo size={24} />
-        <ThemeToggle />
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <ThemeToggle />
+        </div>
       </nav>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px' }}>
+        {/* Language Toggle */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}>
+          <LanguageToggle />
+        </div>
+
         <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 40px)', fontWeight: 900, marginBottom: 8, textAlign: 'center' }}>
-          جهّز <span style={{ color: '#16C784' }}>اللعبة</span>
+          {isAr ? (
+            <>جهّز <span style={{ color: '#16C784' }}>اللعبة</span></>
+          ) : (
+            <>Setup <span style={{ color: '#16C784' }}>the Game</span></>
+          )}
         </h1>
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: 40, fontSize: 17 }}>
-          سمّوا الفرق واختاروا ٦ فئات
+          {isAr ? 'سمّوا الفرق واختاروا ٦ فئات' : 'Name your teams and choose 6 categories'}
         </p>
 
         {/* TEAMS */}
         <div className="glass anim-fade-in-up" style={{ borderRadius: 24, padding: 28, marginBottom: 32 }}>
-          <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 20 }}>١ — أسماء الفرق</h2>
+          <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 20 }}>
+            {isAr ? '١ — أسماء الفرق' : '1 — Team Names'}
+          </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
             <div>
-              <label style={{ display: 'block', marginBottom: 8, color: '#10B981', fontWeight: 700 }}>الفريق الأول</label>
+              <label style={{ display: 'block', marginBottom: 8, color: '#10B981', fontWeight: 700 }}>
+                {isAr ? 'الفريق الأول' : 'Team One'}
+              </label>
               <input
                 className="team-input"
-                placeholder="اسم الفريق الأول"
+                placeholder={isAr ? 'اسم الفريق الأول' : 'Team One name'}
                 value={hydrated ? teamA.name : ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeamName('a', e.target.value)}
                 style={{ borderColor: hydrated && teamA.name ? '#10B981' : undefined }}
               />
             </div>
             <div>
-              <label style={{ display: 'block', marginBottom: 8, color: '#F59E0B', fontWeight: 700 }}>الفريق الثاني</label>
+              <label style={{ display: 'block', marginBottom: 8, color: '#F59E0B', fontWeight: 700 }}>
+                {isAr ? 'الفريق الثاني' : 'Team Two'}
+              </label>
               <input
                 className="team-input"
-                placeholder="اسم الفريق الثاني"
+                placeholder={isAr ? 'اسم الفريق الثاني' : 'Team Two name'}
                 value={hydrated ? teamB.name : ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeamName('b', e.target.value)}
                 style={{ borderColor: hydrated && teamB.name ? '#F59E0B' : undefined }}
@@ -75,7 +100,9 @@ export default function SetupPage() {
         {/* CATEGORIES */}
         <div className="glass anim-fade-in-up delay-100" style={{ borderRadius: 24, padding: 28 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 900 }}>٢ — اختار ٦ فئات</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 900 }}>
+              {isAr ? '٢ — اختار ٦ فئات' : '2 — Choose 6 Categories'}
+            </h2>
             <div style={{
               padding: '8px 16px', borderRadius: 999,
               background: selected.length === 6 ? '#16C78422' : 'var(--card-bg)',
@@ -83,12 +110,12 @@ export default function SetupPage() {
               color: selected.length === 6 ? '#16C784' : 'var(--text-secondary)',
               fontWeight: 900, fontSize: 15,
             }}>
-              {selected.length}/6 فئات مختارة
+              {isAr ? `${selected.length}/6 فئات مختارة` : `${selected.length}/6 selected`}
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
-            {MAIN_CATEGORIES.map((cat) => (
+            {displayCategories.map((cat) => (
               <div key={cat.id} style={{
                 background: 'var(--card-bg)',
                 border: `1px solid var(--card-border)`,
@@ -144,7 +171,7 @@ export default function SetupPage() {
       }}>
         <button className="btn-primary" onClick={handleStart} disabled={!canStart} style={{ fontSize: 17, padding: '14px 40px' }}>
           <Play size={18} fill="white" />
-          ابدأ اللعبة
+          {isAr ? 'ابدأ اللعبة' : 'Start Game'}
         </button>
       </div>
     </div>

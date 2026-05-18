@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { useHydrated } from '@/hooks/useHydrated';
 import { pointColor } from '@/lib/data';
@@ -16,6 +16,7 @@ export default function BoardPage() {
   const hydrated = useHydrated();
   const navigate = useNavigate();
   const phase = useGameStore((s) => s.phase);
+  const language = useGameStore((s) => s.language);
   const teamA = useGameStore((s) => s.teamA);
   const teamB = useGameStore((s) => s.teamB);
   const board = useGameStore((s) => s.board);
@@ -25,7 +26,8 @@ export default function BoardPage() {
   const selectCell = useGameStore((s) => s.selectCell);
   const resetGame = useGameStore((s) => s.resetGame);
 
-  // Redirect to setup if no game in progress
+  const isAr = language === 'ar';
+
   useEffect(() => {
     if (!hydrated) return;
     if (phase === 'setup' || board.length === 0) {
@@ -70,10 +72,12 @@ export default function BoardPage() {
           <div style={{ fontSize: 80, marginBottom: 16 }}>🎉</div>
           <Trophy size={56} color="#F59E0B" style={{ marginBottom: 16 }} />
           <h1 style={{ fontSize: 42, fontWeight: 900, marginBottom: 8 }}>
-            {winner ? `فاز ${winner.name}!` : 'تعادل!'}
+            {winner
+              ? isAr ? `فاز ${winner.name}!` : `${winner.name} Wins!`
+              : isAr ? 'تعادل!' : "It's a Tie!"}
           </h1>
           <p style={{ color: 'var(--text-secondary)', marginBottom: 32, fontSize: 17 }}>
-            انتهت اللعبة — هذي النتائج النهائية
+            {isAr ? 'انتهت اللعبة — هذي النتائج النهائية' : 'Game over — final results'}
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 32 }}>
             <div style={{ padding: 20, borderRadius: 16, background: '#10B98122', border: '1px solid #10B98155' }}>
@@ -87,7 +91,7 @@ export default function BoardPage() {
           </div>
           <button className="btn-primary" onClick={handlePlayAgain} style={{ fontSize: 17, padding: '14px 36px' }}>
             <RotateCcw size={18} />
-            العب مجدداً
+            {isAr ? 'العب مجدداً' : 'Play Again'}
           </button>
         </div>
       </div>
@@ -103,7 +107,7 @@ export default function BoardPage() {
         padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
       }}>
         <button className="btn-ghost" onClick={handleQuit}>
-          <LogOut size={14} /> انسحاب
+          <LogOut size={14} /> {isAr ? 'انسحاب' : 'Quit'}
         </button>
 
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
@@ -125,13 +129,14 @@ export default function BoardPage() {
         gap: 16, padding: 16,
         minHeight: 0,
       }} className="board-layout">
-        {/* Team B (right side in RTL = visual left) */}
+        {/* Team B */}
         <TeamPanel
           name={teamB.name}
           score={teamB.score}
           color="#F59E0B"
           active={currentTurn === 'b'}
           hintsLeft={2 - hintsUsed.b}
+          isAr={isAr}
         />
 
         {/* Board */}
@@ -183,13 +188,14 @@ export default function BoardPage() {
           </div>
         </div>
 
-        {/* Team A (left side in RTL = visual right) */}
+        {/* Team A */}
         <TeamPanel
           name={teamA.name}
           score={teamA.score}
           color="#10B981"
           active={currentTurn === 'a'}
           hintsLeft={2 - hintsUsed.a}
+          isAr={isAr}
         />
       </div>
 
@@ -206,15 +212,16 @@ export default function BoardPage() {
             background: currentTurn === 'a' ? '#10B981' : '#F59E0B',
           }} className="anim-subtle-pulse" />
           <span style={{ fontWeight: 700, fontSize: 14 }}>
-            دور <span style={{ color: currentTurn === 'a' ? '#10B981' : '#F59E0B' }}>
+            {isAr ? 'دور ' : 'Turn: '}
+            <span style={{ color: currentTurn === 'a' ? '#10B981' : '#F59E0B' }}>
               {currentTurn === 'a' ? teamA.name : teamB.name}
             </span>
           </span>
         </div>
         <div style={{ display: 'flex', gap: 16, color: 'var(--text-secondary)', fontSize: 13, fontWeight: 700 }}>
-          <span>{usedCount}/36 سؤال</span>
+          <span dir="ltr">{usedCount}/36 {isAr ? 'سؤال' : 'questions'}</span>
           <span>·</span>
-          <span>{remaining} نقطة متبقية</span>
+          <span dir="ltr">{remaining} {isAr ? 'نقطة متبقية' : 'pts left'}</span>
         </div>
       </div>
     </div>
@@ -297,9 +304,10 @@ type TeamPanelProps = {
   color: string;
   active: boolean;
   hintsLeft: number;
+  isAr: boolean;
 };
 
-function TeamPanel({ name, score, color, active, hintsLeft }: TeamPanelProps) {
+function TeamPanel({ name, score, color, active, hintsLeft, isAr }: TeamPanelProps) {
   return (
     <div className="glass" style={{
       borderRadius: 20, padding: 16,
@@ -317,7 +325,7 @@ function TeamPanel({ name, score, color, active, hintsLeft }: TeamPanelProps) {
       </div>
       <div style={{ width: '100%', height: 1, background: 'var(--card-border)', marginBottom: 12 }} />
       <div style={{ fontSize: 11, color: 'var(--text-secondary)', fontWeight: 700, marginBottom: 6 }}>
-        تلميحات
+        {isAr ? 'تلميحات' : 'Hints'}
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
         {Array.from({ length: 2 }).map((_, i) => (

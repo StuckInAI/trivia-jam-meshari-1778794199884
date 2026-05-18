@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { ARABIC_MAIN_CATEGORIES, ENGLISH_MAIN_CATEGORIES } from '@/lib/categories';
 import { useGameStore } from '@/store/gameStore';
-import LanguageToggle from '@/components/LanguageToggle';
 import { Users, FolderOpen, Trophy, Play } from 'lucide-react';
 
 export default function LandingPage() {
@@ -48,11 +47,6 @@ export default function LandingPage() {
 
           {/* Headline */}
           <div className="anim-fade-in-up delay-100">
-            {/* Language Toggle in hero */}
-            <div style={{ marginBottom: 24 }}>
-              <LanguageToggle />
-            </div>
-
             {isAr ? (
               <>
                 <h1 style={{

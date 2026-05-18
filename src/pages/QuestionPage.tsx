@@ -12,6 +12,7 @@ export default function QuestionPage() {
   const { questionId } = useParams<{ questionId: string }>();
 
   const phase = useGameStore((s) => s.phase);
+  const language = useGameStore((s) => s.language);
   const activeCell = useGameStore((s) => s.activeCell);
   const activeQuestion = useGameStore((s) => s.activeQuestion);
   const currentTurn = useGameStore((s) => s.currentTurn);
@@ -30,7 +31,8 @@ export default function QuestionPage() {
   const closeQuestion = useGameStore((s) => s.closeQuestion);
   const board = useGameStore((s) => s.board);
 
-  // Rehydrate active question from URL param if state was lost
+  const isAr = language === 'ar';
+
   useEffect(() => {
     if (!hydrated) return;
     if (!questionId) {
@@ -47,7 +49,6 @@ export default function QuestionPage() {
     }
   }, [hydrated, questionId, activeCell, board, selectCell, navigate]);
 
-  // When phase returns to board/results, navigate away
   useEffect(() => {
     if (!hydrated) return;
     if (phase === 'board') {
@@ -64,7 +65,6 @@ export default function QuestionPage() {
 
   if (!hydrated) return null;
   if (!activeCell || !activeQuestion) {
-    // Try to lookup question by id for initial render
     const q = questionId ? findQuestion(questionId) : undefined;
     if (!q) return null;
   }
@@ -85,6 +85,22 @@ export default function QuestionPage() {
     closeQuestion();
   };
 
+  // Labels
+  const labelPoints = isAr ? 'نقطة' : 'pts';
+  const labelQuestion = isAr ? 'السؤال' : 'Question';
+  const labelHint = isAr ? 'تلميح' : 'Hint';
+  const labelAnswer = isAr ? 'الإجابة الصحيحة' : 'Correct Answer';
+  const labelShowAnswer = isAr ? 'أظهر الإجابة' : 'Show Answer';
+  const labelUseHint = isAr
+    ? `استخدم تلميح (${MAX_HINTS_PER_TEAM - hintsUsed[currentTurn]} متبقي)`
+    : `Use Hint (${MAX_HINTS_PER_TEAM - hintsUsed[currentTurn]} left)`;
+  const labelTurn = isAr ? `دور ${turnTeam.name}` : `${turnTeam.name}'s Turn`;
+  const labelSteal = isAr ? `🔥 فرصة السرقة — دور ${stealTeam.name}` : `🔥 Steal Chance — ${stealTeam.name}'s Turn`;
+  const labelCorrect = isAr ? 'إجابة صحيحة' : 'Correct';
+  const labelWrong = isAr ? 'إجابة خاطئة' : 'Wrong';
+  const labelStealCorrect = isAr ? `${stealTeam.name} أجاب صح` : `${stealTeam.name} Got It`;
+  const labelStealWrong = isAr ? 'فشلت السرقة' : 'Steal Failed';
+
   return (
     <div className="modal-overlay" style={{
       position: 'fixed', inset: 0, zIndex: 100,
@@ -101,7 +117,7 @@ export default function QuestionPage() {
         {/* Close */}
         <button
           onClick={handleClose}
-          aria-label="إغلاق"
+          aria-label={isAr ? 'إغلاق' : 'Close'}
           style={{
             position: 'absolute', top: 16, left: 16,
             width: 36, height: 36, borderRadius: 999,
@@ -130,8 +146,8 @@ export default function QuestionPage() {
             padding: '8px 16px', borderRadius: 999,
             background: `${pc}22`, border: `1px solid ${pc}66`,
             color: pc, fontWeight: 900, fontSize: 18,
-          }}>
-            {activeCell.points} نقطة
+          }} dir="ltr">
+            {activeCell.points} {labelPoints}
           </div>
         </div>
 
@@ -144,9 +160,7 @@ export default function QuestionPage() {
           fontWeight: 800, fontSize: 14,
           marginBottom: 24, textAlign: 'center',
         }}>
-          {isSteal
-            ? `🔥 فرصة السرقة — دور ${stealTeam.name}`
-            : `دور ${turnTeam.name}`}
+          {isSteal ? labelSteal : labelTurn}
         </div>
 
         {/* Question */}
@@ -155,7 +169,7 @@ export default function QuestionPage() {
           background: 'var(--input-bg)', border: '1px solid var(--input-border)',
           marginBottom: 20,
         }}>
-          <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 700, marginBottom: 8 }}>السؤال</div>
+          <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 700, marginBottom: 8 }}>{labelQuestion}</div>
           <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.6 }}>{question.text}</div>
         </div>
 
@@ -169,7 +183,7 @@ export default function QuestionPage() {
           }}>
             <Lightbulb size={18} style={{ flexShrink: 0, marginTop: 2 }} />
             <div>
-              <div style={{ fontWeight: 900, fontSize: 13, marginBottom: 4 }}>تلميح</div>
+              <div style={{ fontWeight: 900, fontSize: 13, marginBottom: 4 }}>{labelHint}</div>
               <div style={{ fontSize: 15, fontWeight: 700 }}>{question.hint}</div>
             </div>
           </div>
@@ -182,7 +196,7 @@ export default function QuestionPage() {
             background: '#10B9811A', border: '1px solid #10B98155',
             color: '#10B981', marginBottom: 20,
           }}>
-            <div style={{ fontSize: 13, fontWeight: 900, marginBottom: 6 }}>الإجابة الصحيحة</div>
+            <div style={{ fontSize: 13, fontWeight: 900, marginBottom: 6 }}>{labelAnswer}</div>
             <div style={{ fontSize: 20, fontWeight: 800 }}>{question.answer}</div>
           </div>
         )}
@@ -191,7 +205,7 @@ export default function QuestionPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
           {!showAnswer && (
             <button className="btn-ghost" onClick={revealAnswer}>
-              <Eye size={14} /> أظهر الإجابة
+              <Eye size={14} /> {labelShowAnswer}
             </button>
           )}
           {canUseHint && (
@@ -200,7 +214,7 @@ export default function QuestionPage() {
               onClick={revealHint}
               style={{ color: '#F59E0B', borderColor: '#F59E0B55' }}
             >
-              <Lightbulb size={14} /> استخدم تلميح ({MAX_HINTS_PER_TEAM - hintsUsed[currentTurn]} متبقي)
+              <Lightbulb size={14} /> {labelUseHint}
             </button>
           )}
         </div>
@@ -220,7 +234,7 @@ export default function QuestionPage() {
             }}
           >
             <Check size={18} strokeWidth={3} />
-            {isSteal ? `${stealTeam.name} أجاب صح` : 'إجابة صحيحة'}
+            {isSteal ? labelStealCorrect : labelCorrect}
           </button>
           <button
             onClick={isSteal ? markStealWrong : markWrong}
@@ -234,7 +248,7 @@ export default function QuestionPage() {
             }}
           >
             <X size={18} strokeWidth={3} />
-            {isSteal ? 'فشلت السرقة' : 'إجابة خاطئة'}
+            {isSteal ? labelStealWrong : labelWrong}
           </button>
         </div>
       </div>
