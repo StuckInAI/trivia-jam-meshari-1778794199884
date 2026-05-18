@@ -1,4 +1,5 @@
 import type { MainCategory } from '@/types';
+import { VIBE_CODING_CATEGORY } from '@/lib/vibeCodingData';
 
 export const ARABIC_MAIN_CATEGORIES: MainCategory[] = [
   {
@@ -185,6 +186,8 @@ export const ARABIC_MAIN_CATEGORIES: MainCategory[] = [
 ];
 
 export const ENGLISH_MAIN_CATEGORIES: MainCategory[] = [
+  // Vibe Coding is the featured English category — shown first
+  VIBE_CODING_CATEGORY,
   {
     id: 'en-world-geo', name: 'World Geography', emoji: '🌍', color: '#10B981',
     subcategories: [

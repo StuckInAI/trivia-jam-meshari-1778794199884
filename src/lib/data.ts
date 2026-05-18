@@ -1,6 +1,7 @@
 import type { Question } from '@/types';
 import { ALL_ARABIC_SUBCATEGORIES } from '@/lib/categories';
 import { ENGLISH_QUESTIONS } from '@/lib/englishQuestions';
+import { VIBE_CODING_QUESTIONS } from '@/lib/vibeCodingData';
 
 const POINTS: Array<200 | 400 | 600> = [200, 400, 600];
 
@@ -25,7 +26,11 @@ export const ARABIC_QUESTIONS: Question[] = ALL_ARABIC_SUBCATEGORIES.flatMap((s)
   generateQuestionsForSub(s.id)
 );
 
-export const QUESTIONS: Question[] = [...ARABIC_QUESTIONS, ...ENGLISH_QUESTIONS];
+export const QUESTIONS: Question[] = [
+  ...ARABIC_QUESTIONS,
+  ...ENGLISH_QUESTIONS,
+  ...VIBE_CODING_QUESTIONS,
+];
 
 export function findQuestion(id: string): Question | undefined {
   return QUESTIONS.find((q) => q.id === id);
@@ -39,5 +44,6 @@ export function pointColor(p: 200 | 400 | 600): string {
 
 // Named exports for separated category question sets
 export { ENGLISH_QUESTIONS };
+export { VIBE_CODING_QUESTIONS };
 export const arabicCategories = ALL_ARABIC_SUBCATEGORIES;
 export const mainCategories = ALL_ARABIC_SUBCATEGORIES;

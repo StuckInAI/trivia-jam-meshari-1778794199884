@@ -2,10 +2,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { useHydrated } from '@/hooks/useHydrated';
 import { ARABIC_MAIN_CATEGORIES, ENGLISH_MAIN_CATEGORIES } from '@/lib/categories';
+import { VIBE_CODING_CATEGORY } from '@/lib/vibeCodingData';
 import Logo from '@/components/Logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
-import { Check, ArrowLeft, Play } from 'lucide-react';
+import { Check, ArrowLeft, Play, Star } from 'lucide-react';
 
 export default function SetupPage() {
   const hydrated = useHydrated();
@@ -28,6 +29,28 @@ export default function SetupPage() {
     if (!canStart) return;
     startGame();
     navigate('/play/board');
+  };
+
+  // Quick-select all 6 Vibe Coding subcategories at once
+  const handleVibeCodeQuickStart = () => {
+    // Clear current selection first, then add all vc subs
+    const vcSubs = VIBE_CODING_CATEGORY.subcategories;
+    // Use toggleSubcategory logic — easier to call startGame store reset path
+    // We'll directly call store's selectSubcategories via toggleSub
+    // First deselect anything selected that isn't vc, then select all vc subs
+    const currentSelected = selected;
+    // Deselect non-vc
+    currentSelected.forEach((s) => {
+      if (!vcSubs.find((v) => v.id === s.id)) {
+        toggleSub(s);
+      }
+    });
+    // Select missing vc subs
+    vcSubs.forEach((v) => {
+      if (!currentSelected.find((s) => s.id === v.id)) {
+        toggleSub(v);
+      }
+    });
   };
 
   return (
@@ -97,6 +120,69 @@ export default function SetupPage() {
           </div>
         </div>
 
+        {/* VIBE CODING FEATURED BANNER — English only */}
+        {!isAr && (
+          <div
+            className="anim-fade-in-up"
+            style={{
+              borderRadius: 20,
+              padding: '20px 24px',
+              marginBottom: 24,
+              background: 'linear-gradient(135deg, #16C78422 0%, #16C78408 100%)',
+              border: '2px solid #16C784',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 16,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ fontSize: 40 }}>💻</div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontWeight: 900, fontSize: 18, color: '#16C784' }}>Vibe Coding</span>
+                  <span style={{
+                    background: '#16C784',
+                    color: 'white',
+                    fontSize: 11,
+                    fontWeight: 900,
+                    padding: '2px 8px',
+                    borderRadius: 999,
+                    letterSpacing: '0.05em',
+                  }}>FEATURED</span>
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600 }}>
+                  6 subcategories · 36 real questions · 200 / 400 / 600 pts
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handleVibeCodeQuickStart}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '10px 20px',
+                borderRadius: 999,
+                background: '#16C784',
+                color: 'white',
+                fontWeight: 900,
+                fontSize: 14,
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.85'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+            >
+              <Star size={14} fill="white" />
+              Quick-select all 6
+            </button>
+          </div>
+        )}
+
         {/* CATEGORIES */}
         <div className="glass anim-fade-in-up delay-100" style={{ borderRadius: 24, padding: 28 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
@@ -115,47 +201,65 @@ export default function SetupPage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
-            {displayCategories.map((cat) => (
-              <div key={cat.id} style={{
-                background: 'var(--card-bg)',
-                border: `1px solid var(--card-border)`,
-                borderTop: `3px solid ${cat.color}`,
-                borderRadius: 16, padding: 16,
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                  <span style={{ fontSize: 24 }}>{cat.emoji}</span>
-                  <span style={{ fontWeight: 900, fontSize: 16 }}>{cat.name}</span>
+            {displayCategories.map((cat) => {
+              const isVibeCoding = cat.id === 'vibe-coding';
+              return (
+                <div key={cat.id} style={{
+                  background: 'var(--card-bg)',
+                  border: isVibeCoding ? `2px solid ${cat.color}` : `1px solid var(--card-border)`,
+                  borderTop: `3px solid ${cat.color}`,
+                  borderRadius: 16, padding: 16,
+                  position: 'relative',
+                }}>
+                  {isVibeCoding && (
+                    <div style={{
+                      position: 'absolute',
+                      top: -1,
+                      right: 12,
+                      background: cat.color,
+                      color: 'white',
+                      fontSize: 10,
+                      fontWeight: 900,
+                      padding: '2px 8px',
+                      borderRadius: '0 0 8px 8px',
+                      letterSpacing: '0.05em',
+                    }}>FEATURED</div>
+                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                    <span style={{ fontSize: 24 }}>{cat.emoji}</span>
+                    <span style={{ fontWeight: 900, fontSize: 16 }}>{cat.name}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {cat.subcategories.map((sub) => {
+                      const sel = isSelected(sub.id);
+                      const disabled = !sel && selected.length >= 6;
+                      return (
+                        <button
+                          key={sub.id}
+                          onClick={() => toggleSub(sub)}
+                          disabled={disabled}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 4,
+                            padding: '6px 12px', borderRadius: 999,
+                            fontSize: 13, fontWeight: 700,
+                            background: sel ? '#16C78422' : 'var(--input-bg)',
+                            border: `1px solid ${sel ? '#16C784' : 'var(--input-border)'}`,
+                            color: sel ? '#16C784' : 'var(--text-primary)',
+                            opacity: disabled ? 0.4 : 1,
+                            cursor: disabled ? 'not-allowed' : 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                        >
+                          <span>{sub.icon}</span>
+                          <span>{sub.name}</span>
+                          {sel && <Check size={12} strokeWidth={3} />}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {cat.subcategories.map((sub) => {
-                    const sel = isSelected(sub.id);
-                    const disabled = !sel && selected.length >= 6;
-                    return (
-                      <button
-                        key={sub.id}
-                        onClick={() => toggleSub(sub)}
-                        disabled={disabled}
-                        style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 4,
-                          padding: '6px 12px', borderRadius: 999,
-                          fontSize: 13, fontWeight: 700,
-                          background: sel ? '#16C78422' : 'var(--input-bg)',
-                          border: `1px solid ${sel ? '#16C784' : 'var(--input-border)'}`,
-                          color: sel ? '#16C784' : 'var(--text-primary)',
-                          opacity: disabled ? 0.4 : 1,
-                          cursor: disabled ? 'not-allowed' : 'pointer',
-                          transition: 'all 0.15s ease',
-                        }}
-                      >
-                        <span>{sub.icon}</span>
-                        <span>{sub.name}</span>
-                        {sel && <Check size={12} strokeWidth={3} />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
