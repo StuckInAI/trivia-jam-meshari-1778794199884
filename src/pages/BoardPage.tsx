@@ -33,23 +33,19 @@ export default function BoardPage() {
     if (!hydrated) return;
     if (phase === 'setup' || board.length === 0) {
       navigate('/play', { replace: true });
+      return;
     }
-  }, [hydrated, phase, board.length, navigate]);
-
-  // If phase is question/steal, redirect to the active question page
-  useEffect(() => {
-    if (!hydrated) return;
+    // If we're in question/steal phase, redirect to that question page
     if (phase === 'question' || phase === 'steal') {
       const activeCell = useGameStore.getState().activeCell;
       if (activeCell) {
         navigate(`/play/board/question/${activeCell.questionId}`, { replace: true });
       }
     }
-  }, [hydrated, phase, navigate]);
+  }, [hydrated, phase, board.length, navigate]);
 
   if (!hydrated) return null;
   if (board.length === 0) return null;
-
   // Don't render board UI while navigating away to question
   if (phase === 'question' || phase === 'steal') return null;
 
@@ -66,6 +62,7 @@ export default function BoardPage() {
 
   const handleCellClick = (cell: BoardCell) => {
     if (cell.used) return;
+    // Save question state first, then navigate
     selectCell(cell);
     navigate(`/play/board/question/${cell.questionId}`);
   };

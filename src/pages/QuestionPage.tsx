@@ -33,7 +33,7 @@ export default function QuestionPage() {
 
   const isAr = language === 'ar';
 
-  // Bootstrap: if we land here directly (e.g. refresh), try to rehydrate the cell
+  // Bootstrap: if we land here directly (e.g. refresh), try to rehydrate from board
   useEffect(() => {
     if (!hydrated) return;
     if (!questionId) {
@@ -41,7 +41,13 @@ export default function QuestionPage() {
       return;
     }
     // If store already has the right active cell, we're good
-    if (activeCell && activeCell.questionId === questionId) return;
+    if (
+      activeCell &&
+      activeCell.questionId === questionId &&
+      (phase === 'question' || phase === 'steal')
+    ) {
+      return;
+    }
     // Try to find the cell in the board and select it
     const cell = board.find((c) => c.questionId === questionId);
     if (!cell || cell.used) {
@@ -52,7 +58,7 @@ export default function QuestionPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, questionId]);
 
-  // Phase-watch: navigate based on phase changes
+  // Phase-watch: navigate away when question is resolved
   useEffect(() => {
     if (!hydrated) return;
     if (phase === 'board' || phase === 'results') {
@@ -60,7 +66,7 @@ export default function QuestionPage() {
     } else if (phase === 'setup') {
       navigate('/play', { replace: true });
     }
-    // phase === 'question' or 'steal' → stay on this page
+    // phase === 'question' or 'steal' → stay here
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, phase]);
 
@@ -78,6 +84,9 @@ export default function QuestionPage() {
   const question = activeQuestion || (questionId ? findQuestion(questionId) : undefined);
   if (!question || !activeCell) return null;
 
+  // Don't render during phase transitions
+  if (phase === 'board' || phase === 'results' || phase === 'setup') return null;
+
   const isSteal = phase === 'steal';
   const turnTeam = currentTurn === 'a' ? teamA : teamB;
   const stealTeam = currentTurn === 'a' ? teamB : teamA;
@@ -88,14 +97,11 @@ export default function QuestionPage() {
   const canUseHint =
     !isSteal && !hintRevealed && hintsUsed[currentTurn] < MAX_HINTS_PER_TEAM;
 
-  // Close = call store action; phase-watch effect handles navigation
+  // Close button: reset state, phase-watch will navigate back
   const handleClose = () => {
     closeQuestion();
-    // Navigate immediately so the back button feels instant
-    navigate('/play/board', { replace: true });
   };
 
-  // Labels
   const labelPoints = isAr ? 'نقطة' : 'pts';
   const labelQuestion = isAr ? 'السؤال' : 'Question';
   const labelHint = isAr ? 'تلميح' : 'Hint';

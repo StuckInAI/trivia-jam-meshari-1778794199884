@@ -135,8 +135,6 @@ export const useGameStore = create<GameState>()(
       },
 
       closeQuestion: () => {
-        // Fully reset all question-related state and return phase to 'board'
-        // This ensures the board is completely interactive again
         set({
           activeCell: null,
           activeQuestion: null,
@@ -181,11 +179,10 @@ export const useGameStore = create<GameState>()(
         const { phase, activeCell, currentTurn, board } = get();
         if (!activeCell) return;
         if (phase === 'question') {
-          // Transition to steal — stay on question page
           set({ phase: 'steal', showAnswer: false, hintRevealed: false });
           return;
         }
-        // phase === 'steal': mark cell as used without a winner
+        // phase === 'steal'
         const newBoard = board.map((c) =>
           c.questionId === activeCell.questionId ? { ...c, used: true } : c
         );
@@ -265,7 +262,6 @@ export const useGameStore = create<GameState>()(
           showAnswer: false,
           hintRevealed: false,
           hintsUsed: { a: 0, b: 0 },
-          // language is intentionally preserved
         });
       },
     }),

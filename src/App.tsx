@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from '@/pages/LandingPage';
 import SetupPage from '@/pages/SetupPage';
 import BoardPage from '@/pages/BoardPage';
@@ -34,6 +34,7 @@ export default function App() {
       <Route path="/play" element={<SetupPage />} />
       <Route path="/play/board" element={<BoardPage />} />
       <Route path="/play/board/question/:questionId" element={<QuestionPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
