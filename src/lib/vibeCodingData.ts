@@ -27,6 +27,14 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Think of it like a labelled box that holds something you want to remember.',
   },
   {
+    id: 'q-vc-tech-skills-200-2',
+    subcategoryId: 'vc-tech-skills',
+    points: 200,
+    text: 'What symbol is commonly used to mark the beginning of a comment in Python?',
+    answer: 'Hash / #',
+    hint: 'It looks like the number sign.',
+  },
+  {
     id: 'q-vc-tech-skills-400-1',
     subcategoryId: 'vc-tech-skills',
     points: 400,
@@ -35,12 +43,28 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Think of mirrors facing each other, or nesting dolls.',
   },
   {
+    id: 'q-vc-tech-skills-400-2',
+    subcategoryId: 'vc-tech-skills',
+    points: 400,
+    text: 'What data structure works on a Last-In-First-Out basis?',
+    answer: 'Stack',
+    hint: 'Think of a stack of plates.',
+  },
+  {
     id: 'q-vc-tech-skills-600-1',
     subcategoryId: 'vc-tech-skills',
     points: 600,
     text: 'Which time complexity is faster for large inputs — O(n log n) or O(n²)?',
     answer: 'O(n log n)',
     hint: 'Think about how many operations each needs for a million items.',
+  },
+  {
+    id: 'q-vc-tech-skills-600-2',
+    subcategoryId: 'vc-tech-skills',
+    points: 600,
+    text: 'What term describes a program vulnerability caused by writing more data than a buffer can hold?',
+    answer: 'Buffer overflow',
+    hint: 'Too much data spills out of its container.',
   },
 
   // ─── vc-ai-tech ───
@@ -53,6 +77,14 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Two words — machines acting smart.',
   },
   {
+    id: 'q-vc-ai-tech-200-2',
+    subcategoryId: 'vc-ai-tech',
+    points: 200,
+    text: 'Which company created ChatGPT?',
+    answer: 'OpenAI',
+    hint: 'Founded in San Francisco.',
+  },
+  {
     id: 'q-vc-ai-tech-400-1',
     subcategoryId: 'vc-ai-tech',
     points: 400,
@@ -61,12 +93,28 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'One has the answer key, the other discovers patterns on its own.',
   },
   {
+    id: 'q-vc-ai-tech-400-2',
+    subcategoryId: 'vc-ai-tech',
+    points: 400,
+    text: 'What is the name of Google\'s AI chatbot?',
+    answer: 'Gemini',
+    hint: 'Formerly known as Bard.',
+  },
+  {
     id: 'q-vc-ai-tech-600-1',
     subcategoryId: 'vc-ai-tech',
     points: 600,
     text: 'What do we call it when an AI confidently gives a wrong or made-up answer?',
     answer: 'Hallucination',
     hint: 'The AI makes things up — what is that called?',
+  },
+  {
+    id: 'q-vc-ai-tech-600-2',
+    subcategoryId: 'vc-ai-tech',
+    points: 600,
+    text: 'What type of neural network is primarily used for image recognition?',
+    answer: 'CNN',
+    hint: 'Convolutional Neural Network.',
   },
 
   // ─── vc-product ───
@@ -79,6 +127,14 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Minimum Viable ___.',
   },
   {
+    id: 'q-vc-product-200-2',
+    subcategoryId: 'vc-product',
+    points: 200,
+    text: 'What do we call the visual blueprint of an app\'s layout before it is built?',
+    answer: 'Wireframe',
+    hint: 'A skeletal outline of a screen.',
+  },
+  {
     id: 'q-vc-product-400-1',
     subcategoryId: 'vc-product',
     points: 400,
@@ -87,12 +143,28 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Split your users, test two versions, measure which wins.',
   },
   {
+    id: 'q-vc-product-400-2',
+    subcategoryId: 'vc-product',
+    points: 400,
+    text: 'What agile ceremony happens at the end of every sprint to reflect on what went well?',
+    answer: 'Retrospective',
+    hint: 'Look back before you move forward.',
+  },
+  {
     id: 'q-vc-product-600-1',
     subcategoryId: 'vc-product',
     points: 600,
     text: 'What metric measures the percentage of users who keep coming back after their first visit?',
     answer: 'Retention rate',
     hint: 'It measures whether users stick around after day one.',
+  },
+  {
+    id: 'q-vc-product-600-2',
+    subcategoryId: 'vc-product',
+    points: 600,
+    text: 'What metric tells you the average revenue a business can expect from a single customer account?',
+    answer: 'LTV',
+    hint: 'Lifetime Value.',
   },
 
   // ─── vc-team ───
@@ -105,6 +177,14 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Think of it as a time machine and collaborative workspace for your code.',
   },
   {
+    id: 'q-vc-team-200-2',
+    subcategoryId: 'vc-team',
+    points: 200,
+    text: 'What is the most widely used version control platform in the world?',
+    answer: 'GitHub',
+    hint: 'Owned by Microsoft.',
+  },
+  {
     id: 'q-vc-team-400-1',
     subcategoryId: 'vc-team',
     points: 400,
@@ -113,12 +193,28 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Merge preserves history with a join point. This rewrites it to look linear.',
   },
   {
+    id: 'q-vc-team-400-2',
+    subcategoryId: 'vc-team',
+    points: 400,
+    text: 'What agile framework divides work into fixed-length cycles called sprints?',
+    answer: 'Scrum',
+    hint: 'Rugby-inspired software methodology.',
+  },
+  {
     id: 'q-vc-team-600-1',
     subcategoryId: 'vc-team',
     points: 600,
     text: 'What is the automated process of testing and deploying code every time a developer pushes a change?',
     answer: 'CI/CD',
     hint: 'Continuous Integration / Continuous ___.',
+  },
+  {
+    id: 'q-vc-team-600-2',
+    subcategoryId: 'vc-team',
+    points: 600,
+    text: 'What type of review requires another developer to inspect code before it is merged?',
+    answer: 'Code review',
+    hint: 'A peer check before merging.',
   },
 
   // ─── vc-gov ───
@@ -131,6 +227,14 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Enterprise means businesses and organizations, not individuals.',
   },
   {
+    id: 'q-vc-gov-200-2',
+    subcategoryId: 'vc-gov',
+    points: 200,
+    text: 'What three-letter acronym describes the practice of renting computing power over the internet instead of owning servers?',
+    answer: 'Cloud',
+    hint: 'AWS, Azure, and GCP all offer this.',
+  },
+  {
     id: 'q-vc-gov-400-1',
     subcategoryId: 'vc-gov',
     points: 400,
@@ -139,12 +243,28 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Federal Risk and Authorization Management ___.',
   },
   {
+    id: 'q-vc-gov-400-2',
+    subcategoryId: 'vc-gov',
+    points: 400,
+    text: 'What EU regulation governs data privacy and protection for individuals?',
+    answer: 'GDPR',
+    hint: 'General Data Protection Regulation.',
+  },
+  {
     id: 'q-vc-gov-600-1',
     subcategoryId: 'vc-gov',
     points: 600,
     text: 'What security standard is required for encryption used in US government software systems?',
     answer: 'FIPS 140-2',
     hint: 'Federal Information Processing Standard — a number follows.',
+  },
+  {
+    id: 'q-vc-gov-600-2',
+    subcategoryId: 'vc-gov',
+    points: 600,
+    text: 'What framework do US federal agencies follow to manage cybersecurity risk?',
+    answer: 'NIST',
+    hint: 'National Institute of Standards and Technology.',
   },
 
   // ─── vc-community ───
@@ -157,12 +277,28 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     hint: 'Technology used for a positive purpose.',
   },
   {
+    id: 'q-vc-community-200-2',
+    subcategoryId: 'vc-community',
+    points: 200,
+    text: 'What do we call software whose source code is freely available for anyone to view and modify?',
+    answer: 'Open source',
+    hint: 'Linux and Firefox are famous examples.',
+  },
+  {
     id: 'q-vc-community-400-1',
     subcategoryId: 'vc-community',
     points: 400,
-    text: "What term describes the gap between people who have access to technology and those who don't?",
+    text: 'What term describes the gap between people who have access to technology and those who don\'t?',
     answer: 'Digital divide',
     hint: 'Not everyone has a fast phone and WiFi — what is that gap called?',
+  },
+  {
+    id: 'q-vc-community-400-2',
+    subcategoryId: 'vc-community',
+    points: 400,
+    text: 'What term describes designing digital products that everyone — including people with disabilities — can use?',
+    answer: 'Accessibility',
+    hint: 'Often shortened to a11y.',
   },
   {
     id: 'q-vc-community-600-1',
@@ -171,5 +307,13 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     text: 'What field studies whether AI systems treat all groups of people fairly?',
     answer: 'AI ethics',
     hint: 'It is about fairness, bias, and accountability in artificial intelligence.',
+  },
+  {
+    id: 'q-vc-community-600-2',
+    subcategoryId: 'vc-community',
+    points: 600,
+    text: 'What concept requires that AI decisions can be explained and understood by humans?',
+    answer: 'Explainability',
+    hint: 'The opposite of a black box.',
   },
 ];

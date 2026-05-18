@@ -9,9 +9,18 @@ import Confetti from '@/components/Confetti';
 import { Lightbulb, RotateCcw, LogOut, Trophy } from 'lucide-react';
 import type { BoardCell } from '@/types';
 
-// 1 question per level × 3 levels × 6 subs = 18 total
-const TOTAL_POINTS_PER_SUB = 200 + 400 + 600;
-const MAX_POINTS = TOTAL_POINTS_PER_SUB * 6;
+// For a mixed board: non-VC subs have 2 questions per level, VC subs have 1
+// Max points = subs × (200+400+600) × questionsPerLevel
+// We calculate dynamically from the board instead
+
+const VIBE_CODING_SUB_IDS = [
+  'vc-tech-skills',
+  'vc-ai-tech',
+  'vc-product',
+  'vc-team',
+  'vc-gov',
+  'vc-community',
+];
 
 export default function BoardPage() {
   const hydrated = useHydrated();
@@ -51,10 +60,12 @@ export default function BoardPage() {
   if (phase === 'question' || phase === 'steal') return null;
 
   const usedCount = board.filter((c) => c.used).length;
+  const totalQuestions = board.length;
   const wonPoints = board
     .filter((c) => c.used && c.wonBy)
     .reduce((acc, c) => acc + c.points, 0);
-  const remaining = MAX_POINTS - wonPoints;
+  const maxPoints = board.reduce((acc, c) => acc + c.points, 0);
+  const remaining = maxPoints - wonPoints;
 
   const handleQuit = () => {
     resetGame();
@@ -196,7 +207,17 @@ export default function BoardPage() {
     );
   }
 
-  // BOARD SCREEN — 3 rows (200, 400, 600), 1 cell per sub per row
+  // For each sub, determine how many rows (question slots) it has per point level
+  const getRowsForSub = (subId: string) =>
+    VIBE_CODING_SUB_IDS.includes(subId) ? 1 : 2;
+
+  // Maximum rows across all selected subs
+  const maxRows = subs.reduce((max, s) => Math.max(max, getRowsForSub(s.id)), 0);
+
+  // Build point-level rows: for each point value, for each row index up to maxRows
+  const pointLevels = [200, 400, 600] as Array<200 | 400 | 600>;
+
+  // BOARD SCREEN
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
@@ -303,7 +324,7 @@ export default function BoardPage() {
               ))}
             </div>
 
-            {/* 3 rows — one per point level */}
+            {/* Rows: for each point level, for each row index */}
             <div
               style={{
                 display: 'flex',
@@ -313,52 +334,73 @@ export default function BoardPage() {
                 minHeight: 0,
               }}
             >
-              {([200, 400, 600] as Array<200 | 400 | 600>).map((points) => (
-                <div
-                  key={points}
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: `40px repeat(${subs.length}, 1fr)`,
-                    gap: 8,
-                    flex: 1,
-                    minHeight: 0,
-                  }}
-                >
-                  {/* Point label */}
-                  <div
-                    style={{
-                      background: `${pointColor(points)}33`,
-                      border: `1px solid ${pointColor(points)}55`,
-                      borderRadius: 10,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: pointColor(points),
-                      fontWeight: 900,
-                      fontSize: 13,
-                    }}
-                  >
-                    {points}
-                  </div>
+              {pointLevels.map((points) =>
+                Array.from({ length: maxRows }).map((_, rowIdx) => {
+                  const rowNum = rowIdx + 1;
+                  return (
+                    <div
+                      key={`${points}-${rowNum}`}
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: `40px repeat(${subs.length}, 1fr)`,
+                        gap: 8,
+                        flex: 1,
+                        minHeight: 0,
+                      }}
+                    >
+                      {/* Point label — only show on first row of each point level */}
+                      <div
+                        style={{
+                          background: rowIdx === 0 ? `${pointColor(points)}33` : 'transparent',
+                          border: rowIdx === 0 ? `1px solid ${pointColor(points)}55` : '1px solid transparent',
+                          borderRadius: 10,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: pointColor(points),
+                          fontWeight: 900,
+                          fontSize: 13,
+                        }}
+                      >
+                        {rowIdx === 0 ? points : ''}
+                      </div>
 
-                  {/* One cell per subcategory */}
-                  {subs.map((s) => {
-                    const cell = board.find(
-                      (c) =>
-                        c.subcategoryId === s.id &&
-                        c.points === points
-                    );
-                    if (!cell) return <div key={s.id} />;
-                    return (
-                      <Cell
-                        key={cell.questionId}
-                        cell={cell}
-                        onClick={() => handleCellClick(cell)}
-                      />
-                    );
-                  })}
-                </div>
-              ))}
+                      {/* One cell per subcategory */}
+                      {subs.map((s) => {
+                        const subRows = getRowsForSub(s.id);
+                        // If this sub doesn't have a question at this row index, render empty
+                        if (rowNum > subRows) {
+                          return (
+                            <div
+                              key={`${s.id}-empty-${rowNum}`}
+                              style={{
+                                background: 'var(--card-bg)',
+                                border: '1px solid var(--card-border)',
+                                borderRadius: 12,
+                                opacity: 0.2,
+                              }}
+                            />
+                          );
+                        }
+                        const cell = board.find(
+                          (c) =>
+                            c.subcategoryId === s.id &&
+                            c.points === points &&
+                            c.questionId === `q-${s.id}-${points}-${rowNum}`
+                        );
+                        if (!cell) return <div key={`${s.id}-missing-${rowNum}`} />;
+                        return (
+                          <Cell
+                            key={cell.questionId}
+                            cell={cell}
+                            onClick={() => handleCellClick(cell)}
+                          />
+                        );
+                      })}
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
@@ -416,7 +458,7 @@ export default function BoardPage() {
           }}
         >
           <span dir="ltr">
-            {usedCount}/18 {isAr ? 'سؤال' : 'questions'}
+            {usedCount}/{totalQuestions} {isAr ? 'سؤال' : 'questions'}
           </span>
           <span>·</span>
           <span dir="ltr">
