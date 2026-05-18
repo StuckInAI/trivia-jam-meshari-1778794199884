@@ -160,7 +160,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     id: 'q-vc-community-400-1',
     subcategoryId: 'vc-community',
     points: 400,
-    text: 'What term describes the gap between people who have access to technology and those who don\'t?',
+    text: "What term describes the gap between people who have access to technology and those who don't?",
     answer: 'Digital divide',
     hint: 'Not everyone has a fast phone and WiFi — what is that gap called?',
   },
