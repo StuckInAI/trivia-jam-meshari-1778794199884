@@ -23,7 +23,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-tech-skills',
     points: 200,
     text: 'What is a variable and why do we use it in programming?',
-    answer: 'A variable is a named storage location in memory that holds a value. We use variables to store, reuse, and manipulate data throughout a program — so we don't have to repeat the same value over and over.',
+    answer: 'A variable is a named storage location in memory that holds a value. We use variables to store, reuse, and manipulate data throughout a program — so we don\'t have to repeat the same value over and over.',
     hint: 'Think of it like a labelled box that holds something you want to remember.',
   },
   {
@@ -63,7 +63,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-tech-skills',
     points: 600,
     text: 'Explain the concept of memoization and how it differs from dynamic programming.',
-    answer: 'Memoization is a top-down technique where you cache the results of expensive function calls so you don't recompute them. Dynamic programming is a broader bottom-up approach that builds solutions from smaller subproblems. Memoization is a specific implementation strategy often used within DP.',
+    answer: 'Memoization is a top-down technique where you cache the results of expensive function calls so you don\'t recompute them. Dynamic programming is a broader bottom-up approach that builds solutions from smaller subproblems. Memoization is a specific implementation strategy often used within DP.',
     hint: 'Memoization = remember what you calculated. DP = build up the solution from scratch.',
   },
 
@@ -139,7 +139,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-product',
     points: 400,
     text: 'Walk us through the difference between a product roadmap and a backlog. How should a PM prioritize features?',
-    answer: 'A roadmap is a high-level strategic plan showing what will be built and when — it is for stakeholders. A backlog is a detailed list of all tasks, bugs, and features waiting to be worked on. PMs prioritize using frameworks like RICE (Reach, Impact, Confidence, Effort), MoSCoW (Must/Should/Could/Won\'t), or user impact vs effort grids.',
+    answer: "A roadmap is a high-level strategic plan showing what will be built and when — it is for stakeholders. A backlog is a detailed list of all tasks, bugs, and features waiting to be worked on. PMs prioritize using frameworks like RICE (Reach, Impact, Confidence, Effort), MoSCoW (Must/Should/Could/Won't), or user impact vs effort grids.",
     hint: 'One is the big picture plan, the other is the to-do list.',
   },
   {
@@ -305,7 +305,7 @@ export const VIBE_CODING_QUESTIONS: Question[] = [
     subcategoryId: 'vc-community',
     points: 600,
     text: 'A city government wants to use an AI system to allocate social services. What ethical risks exist and how would you design a system that is fair and auditable?',
-    answer: 'Risks include: algorithmic bias (the model may reflect historical discrimination), lack of transparency (recipients don\'t know why they were denied), no human appeal process, data privacy violations, and feedback loops that entrench inequality. Design safeguards: use diverse and representative training data, build explainability into the model (not black-box), require human review for all denial decisions, create a public appeals process, publish audit reports regularly, and involve community stakeholders in the design process.',
+    answer: "Risks include: algorithmic bias (the model may reflect historical discrimination), lack of transparency (recipients don't know why they were denied), no human appeal process, data privacy violations, and feedback loops that entrench inequality. Design safeguards: use diverse and representative training data, build explainability into the model (not black-box), require human review for all denial decisions, create a public appeals process, publish audit reports regularly, and involve community stakeholders in the design process.",
     hint: 'Who does the AI hurt if it gets it wrong? How do you explain and challenge its decisions?',
   },
   {
